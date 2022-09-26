@@ -10,7 +10,30 @@ export default async function pollMid(req, res, next) {
         expireAt: joi.date().format('YYYY-MM-DD HH:mm'),
     
     });
-    const validation = userSchema.validate(req.body, { abortEarly: true });
+    let poll = req.body;
+    let trintadias = 2592000000;
+    if(!poll.expireAt)
+    {
+        trintadias += Date.now(); 
+        const data = new Date(trintadias);
+        poll = 
+            {
+                title: poll.title,
+                expireAt: (data.getFullYear() + "-" + ((data.getMonth() + 1)) + "-" + (data.getDate()) + " " + (data.getHours()) + ":" + (data.getMinutes()))
+            };
+    }
+    else
+    {
+        poll = 
+            {
+                title: poll.title,
+                expireAt: poll.expireAt
+            }
+   
+    }
+    
+    const validation = userSchema.validate(poll, { abortEarly: true });
+    res.locals.poll = poll;
     if (validation.error) {
         return res.status(422).send('Digite os seus dados corretamente!');
     }

@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import mongo from './db/db.js';
 import pollRoutes from './routes/pollRoutes.js';
+import choiceRoutes from './routes/choiceRoutes.js';
 
 let db = await mongo();
 
@@ -11,6 +12,7 @@ app.use(express.json());
 
 const router = express.Router();
 router.use(pollRoutes);
+router.use(choiceRoutes);
 
 
 
